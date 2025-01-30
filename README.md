@@ -26,7 +26,7 @@ cargo run "A ^ B"
 cargo run --release "A ^ B" # This will run faster, it's optimized
 ```
 
-This will generate a file named 'result.txt' containing a truth table like:
+This will generate a file named `result.txt` containing a truth table like:
 
 ```
 |   A   |   B   |   A ^ B   |
