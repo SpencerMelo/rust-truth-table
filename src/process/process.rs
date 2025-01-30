@@ -88,18 +88,15 @@ pub fn traverse(tree: &SyntaxNode) -> Option<bool> {
         return Some(tree.token.value);
     }
 
-    let mut left: Option<bool> = None;
-    let mut right: Option<bool> = None;
+    let left = match &tree.left {
+        Some(val) => traverse(&*val),
+        None => None,
+    };
 
-    match &tree.left {
-        Some(val) => left = traverse(&*val),
-        None => {}
-    }
-
-    match &tree.right {
-        Some(val) => right = traverse(&*val),
-        None => {}
-    }
+    let right = match &tree.right {
+        Some(val) => traverse(&*val),
+        None => None,
+    };
 
     match tree.token.token_type {
         TokenType::Negation => left.map(|x| !x),
