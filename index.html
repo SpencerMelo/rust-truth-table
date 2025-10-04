@@ -188,10 +188,26 @@
         <div id="result" class="result-container"></div>
     </div>
 
-    <script>
-        // Define shared state and functions immediately (before module loads)
-        window.wasmReady = false;
-        window.evaluate_expression_fn = null;
+    <script type="module">
+        import init, { evaluate_expression } from './wasm-pkg/rust_truth_table.js';
+
+        let wasmReady = false;
+
+        // Initialize WASM module
+        init().then(() => {
+            wasmReady = true;
+            console.log('WASM module loaded successfully');
+        }).catch(err => {
+            console.error('Failed to load WASM module:', err);
+            document.getElementById('result').innerHTML =
+                '<div class="error">Failed to load WebAssembly module. Make sure you are serving this file via HTTP (not file://).</div>';
+        });
+
+        document.getElementById('expression').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateTruthTable();
+            }
+        });
 
         window.generateTruthTable = async function() {
             const expression = document.getElementById('expression').value.trim();
@@ -203,7 +219,7 @@
                 return;
             }
 
-            if (!window.wasmReady) {
+            if (!wasmReady) {
                 resultDiv.innerHTML = '<div class="error">WebAssembly module is still loading. Please wait a moment and try again.</div>';
                 return;
             }
@@ -213,7 +229,7 @@
 
             try {
                 // Call the WASM function
-                const resultJson = window.evaluate_expression_fn(expression);
+                const resultJson = evaluate_expression(expression);
                 const data = JSON.parse(resultJson);
 
                 displayTruthTable(data.rows, data.headers);
@@ -271,30 +287,6 @@
             document.getElementById('result').innerHTML = '';
             document.getElementById('expression').focus();
         }
-
-        // Initialize WASM module asynchronously
-        (async function() {
-            try {
-                const module = await import('./wasm-pkg/rust_truth_table.js');
-                await module.default();
-                window.evaluate_expression_fn = module.evaluate_expression;
-                window.wasmReady = true;
-                console.log('WASM module loaded successfully');
-            } catch (err) {
-                console.error('Failed to load WASM module:', err);
-                document.getElementById('result').innerHTML =
-                    '<div class="error">Failed to load WebAssembly module: ' + err.message + '</div>';
-            }
-        })();
-
-        // Add enter key listener
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('expression').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    window.generateTruthTable();
-                }
-            });
-        });
     </script>
 </body>
 </html>
