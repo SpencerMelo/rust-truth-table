@@ -57,13 +57,14 @@ Run test expressions to verify outputs match expected truth table values.
 
 ## Benchmarks
 
-Performance benchmarks using `--release` mode (tested on 2025-10-04):
+Performance benchmarks using `--release` mode with multithreading (tested on 2025-10-04):
 
 | Variables | Rows Generated | Average Time |
 |-----------|----------------|--------------|
-| 5         | 32             | ~0.01s       |
-| 10        | 1,024          | ~0.01s       |
-| 15        | 32,768         | ~0.13s       |
-| 20        | 1,048,576      | ~5.51s       |
+| 5         | 32             | ~206.26ms    |
+| 10        | 1,024          | ~2.71ms      |
+| 15        | 32,768         | ~54.22ms     |
+| 20        | 1,048,576      | ~2.03s       |
+| 25        | 33,554,432     | ~70.30s      |
 
-*Benchmarks run on macOS with optimized release build. Results may vary based on hardware.*
+*Benchmarks run on macOS with optimized release build using parallel processing via Rayon. Each value is averaged from 5 runs. Results may vary based on hardware and CPU core count.*

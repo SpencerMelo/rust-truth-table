@@ -4,6 +4,7 @@ use crate::{
     model::{syntax::SyntaxNode, token::Token},
     parser::parser::Parser,
 };
+use rayon::prelude::*;
 use std::io::{BufWriter, Write};
 
 pub fn evaluate(tokens: Vec<&mut Token>) {
@@ -52,29 +53,37 @@ pub fn evaluate(tokens: Vec<&mut Token>) {
     writeln!(writer, "{}", header).unwrap();
 
     let mut parser = Parser::new(&tokens);
-    let mut syntax_tree = parser.parse();
+    let syntax_tree = parser.parse();
 
-    // Pre-allocate a String for row data
-    let mut row = String::with_capacity(header.len());
+    // Process variations in parallel and collect results
+    let rows: Vec<String> = variations
+        .par_iter()
+        .map(|variation| {
+            // Clone tree for each thread
+            let mut tree = syntax_tree.clone();
 
-    for variation in variations {
-        // Update tree with new proposition values
-        let mut idx = 0;
-        update_tree_values(&mut syntax_tree, &variation, &mut idx);
+            // Update tree with new proposition values
+            let mut idx = 0;
+            update_tree_values(&mut tree, variation, &mut idx);
 
-        let result = traverse(&syntax_tree);
+            let result = traverse(&tree);
 
-        // Clear and reuse the row String
-        row.clear();
+            // Build row string
+            let mut row = String::with_capacity(header.len());
+            for value in variation {
+                row.push_str(&format!("| {: ^5} ", value));
+            }
+            row.push_str(&format!(
+                "| {: ^width$} |",
+                result.unwrap(),
+                width = expression_str.len() - 4
+            ));
+            row
+        })
+        .collect();
 
-        for value in &variation {
-            row.push_str(&format!("| {: ^5} ", value));
-        }
-        row.push_str(&format!(
-            "| {: ^width$} |",
-            result.unwrap(),
-            width = expression_str.len() - 4
-        ));
+    // Write all rows sequentially
+    for row in rows {
         writeln!(writer, "{}", row).unwrap();
     }
 
