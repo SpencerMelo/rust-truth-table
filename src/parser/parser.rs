@@ -13,19 +13,20 @@ impl<'a> Parser<'a> {
         Self { curr: 0, tokens }
     }
 
-    pub fn parse(&mut self) -> SyntaxNode<'a> {
+    pub fn parse(&mut self) -> SyntaxNode {
         self.curr = 0;
         self.bi_conditional()
     }
 
-    fn bi_conditional(&mut self) -> SyntaxNode<'a> {
+    fn bi_conditional(&mut self) -> SyntaxNode {
         let left = self.conditional();
 
         if self.is_token(TokenType::BiConditional) {
-            let operator = self.get_token();
+            let token = self.get_token();
             return SyntaxNode::new(
                 Some(Box::new(left)),
-                operator,
+                token.token_type.clone(),
+                token.value,
                 Some(Box::new(self.bi_conditional())),
             );
         }
@@ -33,14 +34,15 @@ impl<'a> Parser<'a> {
         return left;
     }
 
-    fn conditional(&mut self) -> SyntaxNode<'a> {
+    fn conditional(&mut self) -> SyntaxNode {
         let left = self.disjunction();
 
         if self.is_token(TokenType::Conditional) {
-            let operator = self.get_token();
+            let token = self.get_token();
             return SyntaxNode::new(
                 Some(Box::new(left)),
-                operator,
+                token.token_type.clone(),
+                token.value,
                 Some(Box::new(self.conditional())),
             );
         }
@@ -48,13 +50,15 @@ impl<'a> Parser<'a> {
         return left;
     }
 
-    fn disjunction(&mut self) -> SyntaxNode<'a> {
+    fn disjunction(&mut self) -> SyntaxNode {
         let mut left = self.conjunction();
 
         while self.is_token(TokenType::Disjunction) {
+            let token = self.get_token();
             left = SyntaxNode::new(
                 Some(Box::new(left)),
-                self.get_token(),
+                token.token_type.clone(),
+                token.value,
                 Some(Box::new(self.conjunction())),
             );
         }
@@ -62,24 +66,32 @@ impl<'a> Parser<'a> {
         return left;
     }
 
-    fn conjunction(&mut self) -> SyntaxNode<'a> {
+    fn conjunction(&mut self) -> SyntaxNode {
         let mut left = self.negation();
         while self.is_token(TokenType::Conjunction) {
+            let token = self.get_token();
             left = SyntaxNode::new(
                 Some(Box::new(left)),
-                self.get_token(),
+                token.token_type.clone(),
+                token.value,
                 Some(Box::new(self.negation())),
             )
         }
         return left;
     }
 
-    fn negation(&mut self) -> SyntaxNode<'a> {
+    fn negation(&mut self) -> SyntaxNode {
         if self.is_token(TokenType::Negation) {
-            let negation = self.get_token();
-            SyntaxNode::new(Some(Box::new(self.negation())), negation, None)
+            let token = self.get_token();
+            SyntaxNode::new(
+                Some(Box::new(self.negation())),
+                token.token_type.clone(),
+                token.value,
+                None,
+            )
         } else {
-            SyntaxNode::new(None, self.get_token(), None)
+            let token = self.get_token();
+            SyntaxNode::new(None, token.token_type.clone(), token.value, None)
         }
     }
 

@@ -6,7 +6,7 @@ use crate::{
 };
 use std::io::{BufWriter, Write};
 
-pub fn evaluate(mut tokens: Vec<&mut Token>) {
+pub fn evaluate(tokens: Vec<&mut Token>) {
     let proposition_tokens: Vec<usize> = tokens
         .iter()
         .enumerate()
@@ -51,25 +51,24 @@ pub fn evaluate(mut tokens: Vec<&mut Token>) {
     header.push_str(expression_str);
     writeln!(writer, "{}", header).unwrap();
 
+    let mut parser = Parser::new(&tokens);
+    let mut syntax_tree = parser.parse();
+
     // Pre-allocate a String for row data
     let mut row = String::with_capacity(header.len());
 
     for variation in variations {
-        for i in 0..variation.len() {
-            tokens[proposition_tokens[i]].value = variation[i];
-        }
+        // Update tree with new proposition values
+        let mut idx = 0;
+        update_tree_values(&mut syntax_tree, &variation, &mut idx);
 
-        let mut parser = Parser::new(&tokens);
-        let syntax_tree = parser.parse();
-        let result = traverse(&syntax_tree.clone());
+        let result = traverse(&syntax_tree);
 
         // Clear and reuse the row String
         row.clear();
 
-        for token in tokens.iter() {
-            if token.token_type == TokenType::Proposition {
-                row.push_str(&format!("| {: ^5} ", token.value));
-            }
+        for value in &variation {
+            row.push_str(&format!("| {: ^5} ", value));
         }
         row.push_str(&format!(
             "| {: ^width$} |",
@@ -83,22 +82,35 @@ pub fn evaluate(mut tokens: Vec<&mut Token>) {
     writer.flush().unwrap();
 }
 
-pub fn traverse(tree: &SyntaxNode) -> Option<bool> {
-    if tree.token.token_type == TokenType::Proposition {
-        return Some(tree.token.value);
+pub fn update_tree_values(
+    tree: &mut SyntaxNode,
+    proposition_values: &[bool],
+    proposition_index: &mut usize,
+) {
+    if tree.token_type == TokenType::Proposition {
+        tree.value = proposition_values[*proposition_index];
+        *proposition_index += 1;
+        return;
     }
 
-    let left = match &tree.left {
-        Some(val) => traverse(&*val),
-        None => None,
-    };
+    if let Some(left) = &mut tree.left {
+        update_tree_values(left, proposition_values, proposition_index);
+    }
 
-    let right = match &tree.right {
-        Some(val) => traverse(&*val),
-        None => None,
-    };
+    if let Some(right) = &mut tree.right {
+        update_tree_values(right, proposition_values, proposition_index);
+    }
+}
 
-    match tree.token.token_type {
+pub fn traverse(tree: &SyntaxNode) -> Option<bool> {
+    if tree.token_type == TokenType::Proposition {
+        return Some(tree.value);
+    }
+
+    let left = tree.left.as_ref().and_then(|l| traverse(l));
+    let right = tree.right.as_ref().and_then(|r| traverse(r));
+
+    match tree.token_type {
         TokenType::Negation => left.map(|x| !x),
         TokenType::Conjunction => left.zip(right).map(|(l, r)| l && r),
         TokenType::Disjunction => left.zip(right).map(|(l, r)| l || r),

@@ -1,18 +1,25 @@
-use super::token::Token;
+use crate::config::config::TokenType;
 
 #[derive(Clone)]
-pub struct SyntaxNode<'a> {
-    pub left: Option<Box<SyntaxNode<'a>>>,
-    pub token: &'a Token,
-    pub right: Option<Box<SyntaxNode<'a>>>,
+pub struct SyntaxNode {
+    pub left: Option<Box<SyntaxNode>>,
+    pub token_type: TokenType,
+    pub value: bool,
+    pub right: Option<Box<SyntaxNode>>,
 }
 
-impl<'a> SyntaxNode<'a> {
+impl SyntaxNode {
     pub fn new(
-        left: Option<Box<SyntaxNode<'a>>>,
-        token: &'a Token,
-        right: Option<Box<SyntaxNode<'a>>>,
+        left: Option<Box<SyntaxNode>>,
+        token_type: TokenType,
+        value: bool,
+        right: Option<Box<SyntaxNode>>,
     ) -> Self {
-        Self { left, token, right }
+        Self {
+            left,
+            token_type,
+            value,
+            right,
+        }
     }
 }
