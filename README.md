@@ -40,7 +40,7 @@ This will generate a file named `result.txt` containing a truth table like:
 
 ### Web UI
 
-**Try it online:** [https://spencermelo.github.io/rust-truth-table](https://spencermelo.github.io/rust-truth-table) (replace with your actual GitHub username)
+**Try it online:** [https://spencermelo.github.io/rust-truth-table](https://spencermelo.github.io/rust-truth-table)
 
 The tool is also available as a web interface using WebAssembly. To run locally:
 
