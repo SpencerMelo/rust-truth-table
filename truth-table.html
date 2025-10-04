@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +20,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .container {
             background: white;
             border-radius: 12px;
@@ -29,30 +29,30 @@
             max-width: 95vw;
             width: 100%;
         }
-        
+
         h1 {
             color: #333;
             margin-bottom: 10px;
             font-size: 28px;
         }
-        
+
         .info {
             color: #666;
             margin-bottom: 25px;
             font-size: 14px;
             line-height: 1.6;
         }
-        
+
         .info strong {
             color: #764ba2;
         }
-        
+
         .input-group {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-        
+
         input[type="text"] {
             flex: 1;
             padding: 12px 16px;
@@ -61,12 +61,12 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        
+
         input[type="text"]:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         button {
             padding: 12px 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -78,26 +78,26 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         button:active {
             transform: translateY(0);
         }
-        
+
         button:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         .result-container {
             margin-top: 30px;
         }
-        
+
         .error {
             background: #fee;
             border: 1px solid #fcc;
@@ -106,7 +106,7 @@
             border-radius: 6px;
             margin-bottom: 15px;
         }
-        
+
         .success {
             background: #efe;
             border: 1px solid #cfc;
@@ -115,20 +115,20 @@
             border-radius: 6px;
             margin-bottom: 15px;
         }
-        
+
         .table-wrapper {
             overflow-x: auto;
             margin-top: 15px;
             border-radius: 6px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
             min-width: max-content;
         }
-        
+
         th {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -137,29 +137,29 @@
             font-weight: 600;
             white-space: nowrap;
         }
-        
+
         td {
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
             white-space: nowrap;
         }
-        
+
         tr:nth-child(even) {
             background: #f9f9f9;
         }
-        
+
         tr:hover {
             background: #f0f0f0;
         }
-        
+
         .loading {
             text-align: center;
             color: #667eea;
             padding: 20px;
             font-size: 16px;
         }
-        
+
         .hidden {
             display: none;
         }
@@ -170,90 +170,91 @@
         <h1>Truth Table Generator</h1>
         <div class="info">
             <strong>Supported operators:</strong> ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)<br>
-            <strong>Example:</strong> A ^ B, ~A v B, (A ^ B) -> C
+            <strong>Example:</strong> A ^ B, ~A v B, A ^ B -> C<br>
+            <strong>Note:</strong> Parentheses are not supported. Expressions are evaluated by operator precedence.
         </div>
-        
+
         <div class="input-group">
-            <input 
-                type="text" 
-                id="expression" 
+            <input
+                type="text"
+                id="expression"
                 placeholder="Enter logical expression (e.g., A ^ B)"
                 autocomplete="off"
             >
             <button id="generateBtn" onclick="generateTruthTable()">Generate</button>
             <button onclick="clearAll()">Clear</button>
         </div>
-        
+
         <div id="result" class="result-container"></div>
     </div>
-    
+
     <script type="module">
         import init, { evaluate_expression } from './wasm-pkg/rust_truth_table.js';
-        
+
         let wasmReady = false;
-        
+
         // Initialize WASM module
         init().then(() => {
             wasmReady = true;
             console.log('WASM module loaded successfully');
         }).catch(err => {
             console.error('Failed to load WASM module:', err);
-            document.getElementById('result').innerHTML = 
+            document.getElementById('result').innerHTML =
                 '<div class="error">Failed to load WebAssembly module. Make sure you are serving this file via HTTP (not file://).</div>';
         });
-        
+
         document.getElementById('expression').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 generateTruthTable();
             }
         });
-        
+
         window.generateTruthTable = async function() {
             const expression = document.getElementById('expression').value.trim();
             const resultDiv = document.getElementById('result');
             const generateBtn = document.getElementById('generateBtn');
-            
+
             if (!expression) {
                 resultDiv.innerHTML = '<div class="error">Please enter a logical expression</div>';
                 return;
             }
-            
+
             if (!wasmReady) {
                 resultDiv.innerHTML = '<div class="error">WebAssembly module is still loading. Please wait a moment and try again.</div>';
                 return;
             }
-            
+
             generateBtn.disabled = true;
             resultDiv.innerHTML = '<div class="loading">Generating truth table...</div>';
-            
+
             try {
                 // Call the WASM function
                 const resultJson = evaluate_expression(expression);
                 const data = JSON.parse(resultJson);
-                
+
                 displayTruthTable(data.rows, data.headers);
-                
+
             } catch (error) {
                 resultDiv.innerHTML = `<div class="error">Error: ${escapeHtml(error.toString())}</div>`;
             } finally {
                 generateBtn.disabled = false;
             }
         }
-        
+
         function displayTruthTable(rows, headers) {
             const resultDiv = document.getElementById('result');
-            
+
             let html = '<div class="success">Truth table generated successfully!</div>';
             html += '<div class="table-wrapper">';
             html += '<table>';
-            
+
             // Headers
             html += '<thead><tr>';
             headers.forEach(header => {
                 html += `<th>${escapeHtml(header)}</th>`;
             });
             html += '</tr></thead>';
-            
+
             // Rows
             html += '<tbody>';
             rows.forEach(row => {
@@ -264,12 +265,12 @@
                 html += '</tr>';
             });
             html += '</tbody>';
-            
+
             html += '</table>';
             html += '</div>';
             resultDiv.innerHTML = html;
         }
-        
+
         function escapeHtml(text) {
             const map = {
                 '&': '&amp;',
@@ -280,7 +281,7 @@
             };
             return text.replace(/[&<>"']/g, m => map[m]);
         }
-        
+
         window.clearAll = function() {
             document.getElementById('expression').value = '';
             document.getElementById('result').innerHTML = '';

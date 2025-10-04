@@ -14,6 +14,8 @@ A fast and efficient tool for generating truth tables from logical expressions, 
 - Fast evaluation using recursive descent parsing
 - Available as CLI (outputs to file) or Web UI (interactive)
 
+**Note:** Parentheses are not currently supported. Expressions are evaluated based on operator precedence.
+
 ## Usage
 
 ### CLI
