@@ -19,13 +19,14 @@ impl<'a> Parser<'a> {
     }
 
     fn bi_conditional(&mut self) -> SyntaxNode<'a> {
-        let mut left = self.conditional();
+        let left = self.conditional();
 
-        while self.is_token(TokenType::BiConditional) {
-            left = SyntaxNode::new(
+        if self.is_token(TokenType::BiConditional) {
+            let operator = self.get_token();
+            return SyntaxNode::new(
                 Some(Box::new(left)),
-                self.get_token(),
-                Some(Box::new(self.conditional())),
+                operator,
+                Some(Box::new(self.bi_conditional())),
             );
         }
 
@@ -33,13 +34,14 @@ impl<'a> Parser<'a> {
     }
 
     fn conditional(&mut self) -> SyntaxNode<'a> {
-        let mut left = self.disjunction();
+        let left = self.disjunction();
 
-        while self.is_token(TokenType::Conditional) {
-            left = SyntaxNode::new(
+        if self.is_token(TokenType::Conditional) {
+            let operator = self.get_token();
+            return SyntaxNode::new(
                 Some(Box::new(left)),
-                self.get_token(),
-                Some(Box::new(self.disjunction())),
+                operator,
+                Some(Box::new(self.conditional())),
             );
         }
 
