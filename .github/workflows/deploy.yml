@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,7 @@ jobs:
       - name: Create deployment directory
         run: |
           mkdir -p deploy
-          cp truth-table.html deploy/index.html
+          cp index.html deploy/index.html
           cp -r wasm-pkg deploy/
 
       - name: Upload artifact
