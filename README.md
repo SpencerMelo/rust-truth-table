@@ -54,3 +54,16 @@ cargo build --release # The artifact on this is optimized
 ## Testing
 
 Run test expressions to verify outputs match expected truth table values.
+
+## Benchmarks
+
+Performance benchmarks using `--release` mode (tested on 2025-10-04):
+
+| Variables | Rows Generated | Average Time |
+|-----------|----------------|--------------|
+| 5         | 32             | ~0.01s       |
+| 10        | 1,024          | ~0.01s       |
+| 15        | 32,768         | ~0.13s       |
+| 20        | 1,048,576      | ~5.51s       |
+
+*Benchmarks run on macOS with optimized release build. Results may vary based on hardware.*
