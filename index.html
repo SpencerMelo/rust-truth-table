@@ -387,6 +387,52 @@
             document.getElementById('result').innerHTML = '';
             document.getElementById('expression').focus();
         }
+
+
+        const translations = {
+            'en': {
+                'title': 'Truth Table Generator',
+                'supportedOperators': 'Supported operators:',
+                'supportedOperatorsText': ' ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)',
+                'example': 'Example:',
+                'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
+                'note': 'Note:',
+                'noteText': 'Parentheses are not supported. Expressions are evaluated by operator precedence.',
+                'placeholder': 'Enter logical expression (e.g., A ^ B)',
+                'generateButton': 'Generate',
+                'clearButton': 'Clear',
+                'errorEmpty': 'Please enter a logical expression',
+                'errorWasm': 'WebAssembly module is still loading. Please wait a moment and try again.',
+                'loading': 'Generating truth table...',
+                'success': 'Truth table generated successfully!',
+                'languageOff': 'English',
+                'languageOn': 'Pt-br'
+            },
+
+            'pt-br': {
+                'title': 'Gerador de Tabela-Verdade',
+                'supportedOperators': 'Operadores suportados:',
+                'supportedOperatorsText': ' ~ (NÃO), ^ (E), v (OU), -> (CONDICIONAL), <-> (BICONDICIONAL)',
+                'example': 'Exemplo:',
+                'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
+                'note': 'Aviso:',
+                'infoText': 'Parênteses não são suportados. As expressões são avaliadas por precedência de operador.',
+                'placeholder': 'Digite uma expressão lógica (ex: A ^ B)',
+                'generateButton': 'Gerar',
+                'clearButton': 'Limpar',
+                'errorEmpty': 'Por favor, insira uma expressão lógica',
+                'errorWasm': 'O módulo WebAssembly ainda está carregando. Por favor, aguarde um momento e tente novamente.',
+                'loading': 'Gerando tabela verdade...',
+                'success': 'Tabela verdade gerada com sucesso!',
+                'languageOff': 'Inglês',
+                'languageOn': 'Pt-br'
+            }
+};
+
+
+
+
+
     </script>
 </body>
 </html>
