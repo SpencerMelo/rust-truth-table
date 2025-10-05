@@ -266,9 +266,9 @@
         </div>
 
         <div class="info">
-            <strong data-translate = "supportedOperators">Supported operators:</strong> ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)<br>
-            <strong data-translate = "example">Example:</strong> A ^ B, ~A v B, A ^ B -> C<br>
-            <strong data-translate = "note">Note:</strong> Parentheses are not supported. Expressions are evaluated by operator precedence.
+            <strong data-translate="supportedOperators">Supported operators:</strong> <span data-translate="supportedOperatorsText">~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)</span><br>
+            <strong data-translate="example">Example:</strong> <span data-translate="exampleText">A ^ B, ~A v B, A ^ B -> C</span><br>
+            <strong data-translate="note">Note:</strong> <span data-translate="noteText">Parentheses are not supported. Expressions are evaluated by operator precedence.</span>
         </div>
 
         <div class="input-group">
@@ -318,7 +318,7 @@
                 'example': 'Exemplo:',
                 'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
                 'note': 'Aviso:',
-                'infoText': 'Parênteses não são suportados. As expressões são avaliadas por precedência de operador.',
+                'noteText': 'Parênteses não são suportados. As expressões são avaliadas por precedência de operador.',
                 'placeholder': 'Digite uma expressão lógica (ex: A ^ B)',
                 'generateButton': 'Gerar',
                 'clearButton': 'Limpar',
@@ -335,14 +335,16 @@
         document.querySelector('[data-translate="title"]').textContent = translations[lang].title;
         document.querySelector('[data-translate="supportedOperators"]').textContent = translations[lang].supportedOperators;
         document.querySelector('[data-translate="supportedOperatorsText"]').textContent = translations[lang].supportedOperatorsText;
-
         document.querySelector('[data-translate="example"]').textContent = translations[lang].example;
-
+        document.querySelector('[data-translate="exampleText"]').textContent = translations[lang].exampleText;
         document.querySelector('[data-translate="note"]').textContent = translations[lang].note;
-
+        document.querySelector('[data-translate="noteText"]').textContent = translations[lang].noteText;
         document.querySelector('[data-translate="placeHolder"]').placeholder = translations[lang].placeholder;
         document.querySelector('[data-translate="generateButton"]').textContent = translations[lang].generateButton;
         document.querySelector('[data-translate="clearButton"]').textContent = translations[lang].clearButton;
+
+        //document.querySelector('[data-translate="success"]').textContent = translations[lang].success;
+
 
 
 
