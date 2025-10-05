@@ -325,7 +325,7 @@
                 'errorEmpty': 'Por favor, insira uma expressão lógica',
                 'errorWasm': 'O módulo WebAssembly ainda está carregando. Por favor, aguarde um momento e tente novamente.',
                 'loading': 'Gerando tabela verdade...',
-                'success': 'Tabela verdade gerada com sucesso!',
+                'success': 'Tabela-verdade gerada com sucesso!',
                 'languageOff': 'Inglês',
                 'languageOn': 'Pt-br'
             }
@@ -342,14 +342,6 @@
         document.querySelector('[data-translate="placeHolder"]').placeholder = translations[lang].placeholder;
         document.querySelector('[data-translate="generateButton"]').textContent = translations[lang].generateButton;
         document.querySelector('[data-translate="clearButton"]').textContent = translations[lang].clearButton;
-
-        //document.querySelector('[data-translate="success"]').textContent = translations[lang].success;
-
-
-
-
-        //document.querySelector('[data-translate="infoText"]').textContent = translations[lang].infoText;
-
         document.querySelector('[data-translate="languageOff"]').textContent = translations[lang].languageOff;
         document.querySelector('[data-translate="languageOn"]').textContent = translations[lang].languageOn;
 
@@ -397,18 +389,20 @@
             const resultDiv = document.getElementById('result');
             const generateBtn = document.getElementById('generateBtn');
 
+            const currentLanguage = mainToggle.checked ? 'pt-br' : 'en';
+
             if (!expression) {
-                resultDiv.innerHTML = '<div class="error">Please enter a logical expression</div>';
+                resultDiv.innerHTML = `<div class="error">${translations[currentLanguage].errorEmpty}</div>`;
                 return;
             }
 
             if (!wasmReady) {
-                resultDiv.innerHTML = '<div class="error">WebAssembly module is still loading. Please wait a moment and try again.</div>';
+                resultDiv.innerHTML = `<div class="error">${translations[currentLanguage].errorWasm}</div>`;
                 return;
             }
 
             generateBtn.disabled = true;
-            resultDiv.innerHTML = '<div class="loading">Generating truth table...</div>';
+            resultDiv.innerHTML = `<div class="loading">${translations[currentLanguage].loading}</div>`;
 
             try {
                 // Call the WASM function
@@ -431,9 +425,11 @@
             const resultDiv = document.getElementById('result');
             const CHUNK_SIZE = 1000;
 
+            const currentLanguage = mainToggle.checked ? 'pt-br' : 'en';
+
             // Initial HTML with headers
             const headerHtml = [
-                '<div class="success">Truth table generated successfully!</div>',
+                `<div class="success">${translations[currentLanguage].success}</div>`,
                 '<div class="table-wrapper"><table><thead><tr>',
                 headers.map(h => `<th>${escapeHtml(h)}</th>`).join(''),
                 '</tr></thead><tbody id="tbody-content"></tbody></table></div>'
