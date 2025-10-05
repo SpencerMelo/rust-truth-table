@@ -251,35 +251,36 @@
     <div class="container">
 
         <div class="header-bar">
-            <h1>Truth Table Generator</h1>
+            <h1 data-translate = "title">Truth Table Generator</h1>
 
             <div class="toggle-wrapper">
-                <span id="labelOff" class="label-style">English</span>
+                <span data-translate = "languageOff" id="labelOff" class="label-style">English</span>
 
                 <div class="toggle-switch">
                     <input type="checkbox" id="mainToggle">
                     <label for="mainToggle" class="switch-label"></label>
                 </div>
 
-                <span id="labelOn" class="label-style">Pt-br</span>
+                <span data-translate = "languageOn" id="labelOn" class="label-style">Pt-br</span>
             </div>
         </div>
 
         <div class="info">
-            <strong>Supported operators:</strong> ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)<br>
-            <strong>Example:</strong> A ^ B, ~A v B, A ^ B -> C<br>
-            <strong>Note:</strong> Parentheses are not supported. Expressions are evaluated by operator precedence.
+            <strong data-translate = "supportedOperators">Supported operators:</strong> ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)<br>
+            <strong data-translate = "example">Example:</strong> A ^ B, ~A v B, A ^ B -> C<br>
+            <strong data-translate = "note">Note:</strong> Parentheses are not supported. Expressions are evaluated by operator precedence.
         </div>
 
         <div class="input-group">
             <input
                 type="text"
+                data-translate = "placeHolder"
                 id="expression"
                 placeholder="Enter logical expression (e.g., A ^ B)"
                 autocomplete="off"
             >
-            <button id="generateBtn" onclick="generateTruthTable()">Generate</button>
-            <button onclick="clearAll()">Clear</button>
+            <button data-translate = "generateButton" id="generateBtn" onclick="generateTruthTable()">Generate</button>
+            <button data-translate = "clearButton" onclick="clearAll()">Clear</button>
         </div>
 
         <div id="result" class="result-container"></div>
@@ -290,6 +291,70 @@
 
         let wasmReady = false;
 
+        const translations = {
+            'en': {
+                'title': 'Truth Table Generator',
+                'supportedOperators': 'Supported operators:',
+                'supportedOperatorsText': ' ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)',
+                'example': 'Example:',
+                'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
+                'note': 'Note:',
+                'noteText': 'Parentheses are not supported. Expressions are evaluated by operator precedence.',
+                'placeholder': 'Enter logical expression (e.g., A ^ B)',
+                'generateButton': 'Generate',
+                'clearButton': 'Clear',
+                'errorEmpty': 'Please enter a logical expression',
+                'errorWasm': 'WebAssembly module is still loading. Please wait a moment and try again.',
+                'loading': 'Generating truth table...',
+                'success': 'Truth table generated successfully!',
+                'languageOff': 'English',
+                'languageOn': 'Pt-br'
+            },
+
+            'pt-br': {
+                'title': 'Gerador de Tabela-Verdade',
+                'supportedOperators': 'Operadores suportados:',
+                'supportedOperatorsText': ' ~ (NÃO), ^ (E), v (OU), -> (CONDICIONAL), <-> (BICONDICIONAL)',
+                'example': 'Exemplo:',
+                'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
+                'note': 'Aviso:',
+                'infoText': 'Parênteses não são suportados. As expressões são avaliadas por precedência de operador.',
+                'placeholder': 'Digite uma expressão lógica (ex: A ^ B)',
+                'generateButton': 'Gerar',
+                'clearButton': 'Limpar',
+                'errorEmpty': 'Por favor, insira uma expressão lógica',
+                'errorWasm': 'O módulo WebAssembly ainda está carregando. Por favor, aguarde um momento e tente novamente.',
+                'loading': 'Gerando tabela verdade...',
+                'success': 'Tabela verdade gerada com sucesso!',
+                'languageOff': 'Inglês',
+                'languageOn': 'Pt-br'
+            }
+};
+
+        function setLanguage(lang) {
+        document.querySelector('[data-translate="title"]').textContent = translations[lang].title;
+        document.querySelector('[data-translate="supportedOperators"]').textContent = translations[lang].supportedOperators;
+        document.querySelector('[data-translate="supportedOperatorsText"]').textContent = translations[lang].supportedOperatorsText;
+
+        document.querySelector('[data-translate="example"]').textContent = translations[lang].example;
+
+        document.querySelector('[data-translate="note"]').textContent = translations[lang].note;
+
+        document.querySelector('[data-translate="placeHolder"]').placeholder = translations[lang].placeholder;
+        document.querySelector('[data-translate="generateButton"]').textContent = translations[lang].generateButton;
+        document.querySelector('[data-translate="clearButton"]').textContent = translations[lang].clearButton;
+
+
+
+        //document.querySelector('[data-translate="infoText"]').textContent = translations[lang].infoText;
+
+        document.querySelector('[data-translate="languageOff"]').textContent = translations[lang].languageOff;
+        document.querySelector('[data-translate="languageOn"]').textContent = translations[lang].languageOn;
+
+        localStorage.setItem('language', lang);
+    }
+
+
         // Initialize WASM module
         init().then(() => {
             wasmReady = true;
@@ -299,6 +364,25 @@
             document.getElementById('result').innerHTML =
                 '<div class="error">Failed to load WebAssembly module. Make sure you are serving this file via HTTP (not file://).</div>';
         });
+
+        //Translation Logic
+        const mainToggle = document.getElementById('mainToggle');
+        const storedLang = localStorage.getItem('language');
+
+        const initialLang = storedLang || 'en';
+        if (initialLang === 'pt-br') {
+            mainToggle.checked = true;
+        }
+        setLanguage(initialLang);
+
+        mainToggle.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                setLanguage('pt-br');
+            } else {
+                setLanguage('en');
+            }
+        });
+
 
         document.getElementById('expression').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -387,51 +471,6 @@
             document.getElementById('result').innerHTML = '';
             document.getElementById('expression').focus();
         }
-
-
-        const translations = {
-            'en': {
-                'title': 'Truth Table Generator',
-                'supportedOperators': 'Supported operators:',
-                'supportedOperatorsText': ' ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)',
-                'example': 'Example:',
-                'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
-                'note': 'Note:',
-                'noteText': 'Parentheses are not supported. Expressions are evaluated by operator precedence.',
-                'placeholder': 'Enter logical expression (e.g., A ^ B)',
-                'generateButton': 'Generate',
-                'clearButton': 'Clear',
-                'errorEmpty': 'Please enter a logical expression',
-                'errorWasm': 'WebAssembly module is still loading. Please wait a moment and try again.',
-                'loading': 'Generating truth table...',
-                'success': 'Truth table generated successfully!',
-                'languageOff': 'English',
-                'languageOn': 'Pt-br'
-            },
-
-            'pt-br': {
-                'title': 'Gerador de Tabela-Verdade',
-                'supportedOperators': 'Operadores suportados:',
-                'supportedOperatorsText': ' ~ (NÃO), ^ (E), v (OU), -> (CONDICIONAL), <-> (BICONDICIONAL)',
-                'example': 'Exemplo:',
-                'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
-                'note': 'Aviso:',
-                'infoText': 'Parênteses não são suportados. As expressões são avaliadas por precedência de operador.',
-                'placeholder': 'Digite uma expressão lógica (ex: A ^ B)',
-                'generateButton': 'Gerar',
-                'clearButton': 'Limpar',
-                'errorEmpty': 'Por favor, insira uma expressão lógica',
-                'errorWasm': 'O módulo WebAssembly ainda está carregando. Por favor, aguarde um momento e tente novamente.',
-                'loading': 'Gerando tabela verdade...',
-                'success': 'Tabela verdade gerada com sucesso!',
-                'languageOff': 'Inglês',
-                'languageOn': 'Pt-br'
-            }
-};
-
-
-
-
 
     </script>
 </body>
