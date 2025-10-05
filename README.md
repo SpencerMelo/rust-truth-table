@@ -56,7 +56,7 @@ wasm-pack build --target web --out-dir wasm-pkg
 python3 -m http.server 8000
 ```
 
-3. Open http://localhost:8000/truth-table.html in your browser
+3. Open http://localhost:8000/index.html in your browser
 
 The web interface provides an interactive UI with text input and table display, running the same Rust code compiled to WebAssembly for near-native performance.
 
