@@ -179,10 +179,6 @@
             font-size: 16px;
         }
 
-        .hidden {
-            display: none;
-        }
-
         .toggle-switch input[type="checkbox"] {
             display: none;
         }
@@ -199,16 +195,6 @@
             transition: color 0.2s, font-weight 0.2s;
             font-weight: 400;
             color: #9ca3af;
-        }
-
-        .label-active-off {
-            color: #764ba2;
-            font-weight: 700;
-        }
-
-        .label-active-on {
-            color: #667eea;
-            font-weight: 700;
         }
 
         .switch-label {
@@ -261,7 +247,7 @@
                     <label for="mainToggle" class="switch-label"></label>
                 </div>
 
-                <span data-translate = "languageOn" id="labelOn" class="label-style">Pt-br</span>
+                <span data-translate = "languageOn" id="labelOn" class="label-style">Português</span>
             </div>
         </div>
 
@@ -306,9 +292,7 @@
                 'errorEmpty': 'Please enter a logical expression',
                 'errorWasm': 'WebAssembly module is still loading. Please wait a moment and try again.',
                 'loading': 'Generating truth table...',
-                'success': 'Truth table generated successfully!',
-                'languageOff': 'English',
-                'languageOn': 'Pt-br'
+                'success': 'Truth table generated successfully!'
             },
 
             'pt-br': {
@@ -325,9 +309,7 @@
                 'errorEmpty': 'Por favor, insira uma expressão lógica',
                 'errorWasm': 'O módulo WebAssembly ainda está carregando. Por favor, aguarde um momento e tente novamente.',
                 'loading': 'Gerando tabela verdade...',
-                'success': 'Tabela-verdade gerada com sucesso!',
-                'languageOff': 'Inglês',
-                'languageOn': 'Pt-br'
+                'success': 'Tabela-verdade gerada com sucesso!'
             }
 };
 
@@ -342,8 +324,6 @@
         document.querySelector('[data-translate="placeHolder"]').placeholder = translations[lang].placeholder;
         document.querySelector('[data-translate="generateButton"]').textContent = translations[lang].generateButton;
         document.querySelector('[data-translate="clearButton"]').textContent = translations[lang].clearButton;
-        document.querySelector('[data-translate="languageOff"]').textContent = translations[lang].languageOff;
-        document.querySelector('[data-translate="languageOn"]').textContent = translations[lang].languageOn;
 
         localStorage.setItem('language', lang);
     }
