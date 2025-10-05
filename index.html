@@ -41,7 +41,7 @@
 
         h1 {
             color: #333;
-            margin: 0; /* CRITICAL FIX: Ensures H1 default margins don't break flex alignment */
+            margin: 0;
             font-size: 28px;
         }
 
@@ -185,23 +185,21 @@
 
         .toggle-wrapper {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-shrink: 0;
         }
 
         .label-style {
             font-size: 16px;
-            transition: color 0.2s, font-weight 0.2s;
-            font-weight: 400;
-            color: #9ca3af;
+            font-weight: 600;
+            color: gray;
         }
 
         .switch-label {
             display: inline-block;
             width: 50px;
             height: 26px;
-            background-color: #d1d5db;
+            background-color: midnightblue;
             border-radius: 13px;
             position: relative;
             cursor: pointer;
@@ -224,7 +222,7 @@
         }
 
         .toggle-switch input[type="checkbox"]:checked + .switch-label {
-            background-color: #667eea;
+            background-color: forestgreen;
         }
 
         .toggle-switch input[type="checkbox"]:checked + .switch-label::after {
