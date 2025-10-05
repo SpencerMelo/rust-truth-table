@@ -242,43 +242,46 @@
                 const resultJson = evaluate_expression(expression);
                 const data = JSON.parse(resultJson);
 
-                displayTruthTable(data.rows, data.headers);
+                // Defer rendering to next frame for better performance
+                requestAnimationFrame(() => {
+                    displayTruthTable(data.rows, data.headers);
+                    generateBtn.disabled = false;
+                });
 
             } catch (error) {
                 resultDiv.innerHTML = `<div class="error">Error: ${escapeHtml(error.toString())}</div>`;
-            } finally {
                 generateBtn.disabled = false;
             }
         }
 
-        function displayTruthTable(rows, headers) {
+        async function displayTruthTable(rows, headers) {
             const resultDiv = document.getElementById('result');
+            const CHUNK_SIZE = 1000;
 
-            let html = '<div class="success">Truth table generated successfully!</div>';
-            html += '<div class="table-wrapper">';
-            html += '<table>';
+            // Initial HTML with headers
+            const headerHtml = [
+                '<div class="success">Truth table generated successfully!</div>',
+                '<div class="table-wrapper"><table><thead><tr>',
+                headers.map(h => `<th>${escapeHtml(h)}</th>`).join(''),
+                '</tr></thead><tbody id="tbody-content"></tbody></table></div>'
+            ].join('');
 
-            // Headers
-            html += '<thead><tr>';
-            headers.forEach(header => {
-                html += `<th>${escapeHtml(header)}</th>`;
-            });
-            html += '</tr></thead>';
+            resultDiv.innerHTML = headerHtml;
+            const tbody = document.getElementById('tbody-content');
 
-            // Rows
-            html += '<tbody>';
-            rows.forEach(row => {
-                html += '<tr>';
-                row.forEach(cell => {
-                    html += `<td>${escapeHtml(String(cell))}</td>`;
+            // Process rows in chunks to avoid blocking
+            for (let i = 0; i < rows.length; i += CHUNK_SIZE) {
+                await new Promise(resolve => {
+                    requestIdleCallback(() => {
+                        const chunk = rows.slice(i, i + CHUNK_SIZE);
+                        const chunkHtml = chunk.map(row => 
+                            '<tr>' + row.map(cell => `<td>${escapeHtml(String(cell))}</td>`).join('') + '</tr>'
+                        ).join('');
+                        tbody.insertAdjacentHTML('beforeend', chunkHtml);
+                        resolve();
+                    }, { timeout: 50 });
                 });
-                html += '</tr>';
-            });
-            html += '</tbody>';
-
-            html += '</table>';
-            html += '</div>';
-            resultDiv.innerHTML = html;
+            }
         }
 
         function escapeHtml(text) {
