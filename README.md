@@ -1,5 +1,9 @@
 # Rust Truth Table Generator
 
+[![en](https://img.shields.io/badge/lang_english-blue.svg)](https://github.com/SpencerMelo/rust-truth-table/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-portuguese-forestgreen.svg)](https://github.com/SpencerMelo/rust-truth-table/blob/main/README.pt-br.md)
+
+
 A fast and efficient tool for generating truth tables from logical expressions, available both as a CLI and web interface.
 
 ## Features
