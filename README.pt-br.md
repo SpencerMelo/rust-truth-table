@@ -1,6 +1,6 @@
-# Gerador de Tabela-Verdade em Rust
+# Gerador de Tabela-Verdade
 
-[![en](https://img.shields.io/badge/lang_português-forestgreen.svg)](https://github.com/SpencerMelo/rust-truth-table/blob/main/README.pt-br.md)
+[![en](https://img.shields.io/badge/lang-português-forestgreen.svg)](https://github.com/SpencerMelo/rust-truth-table/blob/main/README.pt-br.md)
 [![en](https://img.shields.io/badge/lang-inglês-blue.svg)](https://github.com/SpencerMelo/rust-truth-table/blob/main/README.md)
 
 Uma ferramenta rápida e eficiente para gerar tabelas-verdade a partir de expressões lógicas. Disponível tanto em CLI quanto em interface web.
