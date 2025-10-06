@@ -23,13 +23,28 @@ impl fmt::Display for TokenType {
     }
 }
 
-pub fn get_type(lexeme: &str) -> TokenType {
-    match lexeme {
-        "~" => TokenType::Negation,
-        "^" => TokenType::Conjunction,
-        "v" => TokenType::Disjunction,
-        "->" => TokenType::Conditional,
-        "<->" => TokenType::BiConditional,
-        _ => TokenType::Proposition,
+pub struct OperatorConfig {
+    pub not_op: String,
+    pub and_op: String,
+    pub or_op: String,
+    pub conditional_op: String,
+    pub biconditional_op: String,
+}
+
+impl OperatorConfig {
+    pub fn get_type(&self, lexeme: &str) -> TokenType {
+        if lexeme == self.not_op {
+            TokenType::Negation
+        } else if lexeme == self.and_op {
+            TokenType::Conjunction
+        } else if lexeme == self.or_op {
+            TokenType::Disjunction
+        } else if lexeme == self.conditional_op {
+            TokenType::Conditional
+        } else if lexeme == self.biconditional_op {
+            TokenType::BiConditional
+        } else {
+            TokenType::Proposition
+        }
     }
 }

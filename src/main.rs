@@ -1,4 +1,5 @@
 use rust_truth_table::{
+    config::config::OperatorConfig,
     lexer::lexer::Lexer,
     model::{token::Token, trie::Trie},
     process::process::evaluate,
@@ -17,10 +18,19 @@ fn main() {
     let mut trie: Trie = Trie::new();
     trie.add_words(["~", "^", "v", "->", "<->"].to_vec());
 
+    let operator_config = OperatorConfig {
+        not_op: "~".to_string(),
+        and_op: "^".to_string(),
+        or_op: "v".to_string(),
+        conditional_op: "->".to_string(),
+        biconditional_op: "<->".to_string(),
+    };
+
     let mut tokens: Vec<Token> = Lexer::get_tokens(&mut Lexer {
         pos: 0,
         exp: expression,
         lex: trie,
+        config: &operator_config,
     });
 
     let tokens_refs: Vec<&mut Token> = tokens.iter_mut().collect();

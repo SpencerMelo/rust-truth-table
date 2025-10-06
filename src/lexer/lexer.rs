@@ -1,5 +1,5 @@
 use crate::{
-    config::config::get_type,
+    config::config::OperatorConfig,
     model::{token::Token, trie::Trie},
 };
 
@@ -7,6 +7,7 @@ pub struct Lexer<'a> {
     pub pos: usize,
     pub exp: &'a str,
     pub lex: Trie,
+    pub config: &'a OperatorConfig,
 }
 
 impl<'a> Lexer<'a> {
@@ -56,7 +57,7 @@ impl<'a> Lexer<'a> {
         Token::new(
             self.pos - (buffer.len() - 1),
             self.pos,
-            get_type(buffer),
+            self.config.get_type(buffer),
             buffer.to_string(),
             false,
         )
