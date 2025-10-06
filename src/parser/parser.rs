@@ -13,16 +13,16 @@ impl<'a> Parser<'a> {
         Self { curr: 0, tokens }
     }
 
-    pub fn parse(&mut self) -> SyntaxNode {
+    pub fn parse(&mut self) -> Result<SyntaxNode, String> {
         self.curr = 0;
 
         // Validate no consecutive propositions
-        self.validate_tokens();
+        self.validate_tokens()?;
 
-        self.bi_conditional()
+        Ok(self.bi_conditional())
     }
 
-    fn validate_tokens(&self) {
+    fn validate_tokens(&self) -> Result<(), String> {
         for i in 0..self.tokens.len() - 1 {
             let current = &self.tokens[i];
             let next = &self.tokens[i + 1];
@@ -30,15 +30,14 @@ impl<'a> Parser<'a> {
             if current.token_type == TokenType::Proposition
                 && next.token_type == TokenType::Proposition
             {
-                panic!(
-                    "Invalid expression: Consecutive propositions '{}' and '{}' at positions {} and {}. Propositions must be connected by operators.",
+                return Err(format!(
+                    "Consecutive propositions '{}' and '{}'. Propositions must be connected by operators.",
                     current.lexeme,
-                    next.lexeme,
-                    i,
-                    i + 1
-                );
+                    next.lexeme
+                ));
             }
         }
+        Ok(())
     }
 
     fn bi_conditional(&mut self) -> SyntaxNode {

@@ -11,7 +11,7 @@ pub struct Lexer<'a> {
 }
 
 impl<'a> Lexer<'a> {
-    pub fn get_tokens(&mut self) -> Vec<Token> {
+    pub fn get_tokens(&mut self) -> Result<Vec<Token>, String> {
         self.pos = 0;
 
         let mut tokens = Vec::new();
@@ -36,7 +36,10 @@ impl<'a> Lexer<'a> {
                     } else if !self.lex.has_partial(&buffer)
                         && !buffer.chars().all(|c| c.is_alphabetic())
                     {
-                        panic!("Invalid char '{}' at pos: '{}'", letter, self.pos);
+                        return Err(format!(
+                            "Invalid character '{}' at position {}",
+                            letter, self.pos
+                        ));
                     }
                 }
             }
@@ -45,12 +48,15 @@ impl<'a> Lexer<'a> {
                 if buffer.chars().all(|c| c.is_alphabetic()) {
                     tokens.push(self.create_token(&buffer));
                 } else {
-                    panic!("Invalid char '{}' at end", letter);
+                    return Err(format!(
+                        "Invalid character '{}' at end of expression",
+                        letter
+                    ));
                 }
             }
         }
 
-        tokens
+        Ok(tokens)
     }
 
     fn create_token(&self, buffer: &str) -> Token {

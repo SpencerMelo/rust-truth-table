@@ -49,7 +49,7 @@ pub fn evaluate_expression(
         exp: expression,
         lex: trie,
         config: &operator_config,
-    });
+    })?;
 
     let tokens_refs: Vec<&mut Token> = tokens.iter_mut().collect();
 
@@ -78,7 +78,7 @@ pub fn evaluate_expression(
 
     // Parse syntax tree
     let mut parser = Parser::new(&tokens_refs);
-    let syntax_tree = parser.parse();
+    let syntax_tree = parser.parse()?;
 
     // Generate rows
     let mut rows: Vec<Vec<String>> = Vec::new();

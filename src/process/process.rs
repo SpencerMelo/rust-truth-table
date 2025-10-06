@@ -7,7 +7,7 @@ use crate::{
 use rayon::prelude::*;
 use std::io::{BufWriter, Write};
 
-pub fn evaluate(tokens: Vec<&mut Token>) {
+pub fn evaluate(tokens: Vec<&mut Token>) -> Result<(), String> {
     let proposition_tokens: Vec<usize> = tokens
         .iter()
         .enumerate()
@@ -53,7 +53,7 @@ pub fn evaluate(tokens: Vec<&mut Token>) {
     writeln!(writer, "{}", header).unwrap();
 
     let mut parser = Parser::new(&tokens);
-    let syntax_tree = parser.parse();
+    let syntax_tree = parser.parse()?;
 
     // Process variations in parallel and collect results
     let rows: Vec<String> = variations
@@ -89,6 +89,8 @@ pub fn evaluate(tokens: Vec<&mut Token>) {
 
     // Ensure all data is written before closing
     writer.flush().unwrap();
+
+    Ok(())
 }
 
 pub fn update_tree_values(
