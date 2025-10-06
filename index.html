@@ -37,12 +37,15 @@
             align-items: center; /* Vertically align items */
             flex-wrap: nowrap; /* EXPLICITLY prevent wrapping */
             margin-bottom: 25px;
+            gap: 15px;
         }
 
         h1 {
             color: #333;
             margin: 0;
             font-size: 28px;
+            flex-shrink: 1;
+            min-width: 0;
         }
 
         .info {
@@ -62,6 +65,73 @@
             margin-bottom: 20px;
         }
 
+        .symbols-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .symbols-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .symbols-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #764ba2;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            flex: 1;
+        }
+
+        .symbols-grid.boolean-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .symbol-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .symbol-input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .symbol-input-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s;
+            font-weight: 500;
+            height: 40px;
+            max-height: 40px;
+        }
+
+        .symbol-input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
         @media (max-width: 768px) {
             .input-group {
                 flex-direction: column;
@@ -69,6 +139,28 @@
 
             button {
                 width: 100%;
+            }
+
+            .symbols-container {
+                grid-template-columns: 1fr;
+            }
+
+            .symbols-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .toggle-wrapper {
+                align-self: flex-start;
             }
         }
 
@@ -185,14 +277,16 @@
 
         .toggle-wrapper {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-shrink: 0;
+            align-items: center;
         }
 
         .label-style {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             color: gray;
+            white-space: nowrap;
         }
 
         .switch-label {
@@ -250,9 +344,51 @@
         </div>
 
         <div class="info">
-            <strong data-translate="supportedOperators">Supported operators:</strong> <span data-translate="supportedOperatorsText">~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)</span><br>
+            <strong data-translate="supportedOperators">Supported operators:</strong> <span data-translate="supportedOperatorsText">NOT, AND, OR, CONDITIONAL, BI-CONDITIONAL</span><br>
             <strong data-translate="example">Example:</strong> <span data-translate="exampleText">A ^ B, ~A v B, A ^ B -> C</span><br>
             <strong data-translate="note">Note:</strong> <span data-translate="noteText">Parentheses are not supported. Expressions are evaluated by operator precedence.</span>
+        </div>
+
+        <div class="symbols-container">
+            <div class="symbols-section">
+                <h3>Operators</h3>
+                <div class="symbols-grid">
+                    <div class="symbol-input-group">
+                        <label for="not-op">NOT</label>
+                        <input type="text" id="not-op" value="~" autocomplete="off" maxlength="3">
+                    </div>
+                    <div class="symbol-input-group">
+                        <label for="and-op">AND</label>
+                        <input type="text" id="and-op" value="^" autocomplete="off" maxlength="3">
+                    </div>
+                    <div class="symbol-input-group">
+                        <label for="or-op">OR</label>
+                        <input type="text" id="or-op" value="v" autocomplete="off" maxlength="3">
+                    </div>
+                    <div class="symbol-input-group">
+                        <label for="conditional-op">Conditional</label>
+                        <input type="text" id="conditional-op" value="->" autocomplete="off" maxlength="4">
+                    </div>
+                    <div class="symbol-input-group">
+                        <label for="biconditional-op">Biconditional</label>
+                        <input type="text" id="biconditional-op" value="<->" autocomplete="off" maxlength="4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="symbols-section">
+                <h3>Boolean Values</h3>
+                <div class="symbols-grid boolean-grid">
+                    <div class="symbol-input-group">
+                        <label for="true-val">True</label>
+                        <input type="text" id="true-val" value="true" autocomplete="off" maxlength="5">
+                    </div>
+                    <div class="symbol-input-group">
+                        <label for="false-val">False</label>
+                        <input type="text" id="false-val" value="false" autocomplete="off" maxlength="5">
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="input-group">
@@ -279,7 +415,7 @@
             'en': {
                 'title': 'Truth Table Generator',
                 'supportedOperators': 'Supported operators:',
-                'supportedOperatorsText': ' ~ (NOT), ^ (AND), v (OR), -> (CONDITIONAL), <-> (BI-CONDITIONAL)',
+                'supportedOperatorsText': 'NOT, AND, OR, CONDITIONAL, BI-CONDITIONAL',
                 'example': 'Example:',
                 'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
                 'note': 'Note:',
@@ -296,7 +432,7 @@
             'pt-br': {
                 'title': 'Gerador de Tabela-Verdade',
                 'supportedOperators': 'Operadores suportados:',
-                'supportedOperatorsText': ' ~ (NÃO), ^ (E), v (OU), -> (CONDICIONAL), <-> (BICONDICIONAL)',
+                'supportedOperatorsText': ' NÃO, E, OU, CONDICIONAL, BICONDICIONAL',
                 'example': 'Exemplo:',
                 'exampleText': ' A ^ B, ~A v B, A ^ B -> C',
                 'note': 'Aviso:',
@@ -379,12 +515,30 @@
                 return;
             }
 
+            // Get custom symbols
+            const notOp = document.getElementById('not-op').value || '~';
+            const andOp = document.getElementById('and-op').value || '^';
+            const orOp = document.getElementById('or-op').value || 'v';
+            const conditionalOp = document.getElementById('conditional-op').value || '->';
+            const biconditionalOp = document.getElementById('biconditional-op').value || '<->';
+            const trueVal = document.getElementById('true-val').value || 'true';
+            const falseVal = document.getElementById('false-val').value || 'false';
+
             generateBtn.disabled = true;
             resultDiv.innerHTML = `<div class="loading">${translations[currentLanguage].loading}</div>`;
 
             try {
-                // Call the WASM function
-                const resultJson = evaluate_expression(expression);
+                // Call the WASM function with custom symbols
+                const resultJson = evaluate_expression(
+                    expression,
+                    notOp,
+                    andOp,
+                    orOp,
+                    conditionalOp,
+                    biconditionalOp,
+                    trueVal,
+                    falseVal
+                );
                 const data = JSON.parse(resultJson);
 
                 // Defer rendering to next frame for better performance
@@ -421,7 +575,7 @@
                 await new Promise(resolve => {
                     requestIdleCallback(() => {
                         const chunk = rows.slice(i, i + CHUNK_SIZE);
-                        const chunkHtml = chunk.map(row => 
+                        const chunkHtml = chunk.map(row =>
                             '<tr>' + row.map(cell => `<td>${escapeHtml(String(cell))}</td>`).join('') + '</tr>'
                         ).join('');
                         tbody.insertAdjacentHTML('beforeend', chunkHtml);
