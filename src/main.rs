@@ -31,11 +31,12 @@ fn main() {
         exp: expression,
         lex: trie,
         config: &operator_config,
-    });
+    })
+    .unwrap_or_else(|err| panic!("{}", err));
 
     let tokens_refs: Vec<&mut Token> = tokens.iter_mut().collect();
 
-    evaluate(tokens_refs);
+    evaluate(tokens_refs).unwrap_or_else(|err| panic!("{}", err));
 
     let duration = start.elapsed();
     println!("Time elapsed: {:?}", duration);
