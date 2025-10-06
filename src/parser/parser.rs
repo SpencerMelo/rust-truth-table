@@ -15,7 +15,30 @@ impl<'a> Parser<'a> {
 
     pub fn parse(&mut self) -> SyntaxNode {
         self.curr = 0;
+
+        // Validate no consecutive propositions
+        self.validate_tokens();
+
         self.bi_conditional()
+    }
+
+    fn validate_tokens(&self) {
+        for i in 0..self.tokens.len() - 1 {
+            let current = &self.tokens[i];
+            let next = &self.tokens[i + 1];
+
+            if current.token_type == TokenType::Proposition
+                && next.token_type == TokenType::Proposition
+            {
+                panic!(
+                    "Invalid expression: Consecutive propositions '{}' and '{}' at positions {} and {}. Propositions must be connected by operators.",
+                    current.lexeme,
+                    next.lexeme,
+                    i,
+                    i + 1
+                );
+            }
+        }
     }
 
     fn bi_conditional(&mut self) -> SyntaxNode {

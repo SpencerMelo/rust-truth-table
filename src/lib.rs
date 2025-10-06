@@ -30,6 +30,9 @@ pub fn evaluate_expression(
     true_val: &str,
     false_val: &str,
 ) -> Result<String, String> {
+    // Set up panic hook to log panics to console
+    console_error_panic_hook::set_once();
+
     let operator_config = OperatorConfig {
         not_op: not_op.to_string(),
         and_op: and_op.to_string(),
