@@ -351,40 +351,40 @@
 
         <div class="symbols-container">
             <div class="symbols-section">
-                <h3>Operators</h3>
+                <h3 data-translate="operators">Operators</h3>
                 <div class="symbols-grid">
                     <div class="symbol-input-group">
-                        <label for="not-op">NOT</label>
+                        <label data-translate="not" for="not-op">NOT</label>
                         <input type="text" id="not-op" value="~" autocomplete="off" maxlength="3">
                     </div>
                     <div class="symbol-input-group">
-                        <label for="and-op">AND</label>
+                        <label data-translate="and" for="and-op">AND</label>
                         <input type="text" id="and-op" value="^" autocomplete="off" maxlength="3">
                     </div>
                     <div class="symbol-input-group">
-                        <label for="or-op">OR</label>
+                        <label data-translate="or" for="or-op">OR</label>
                         <input type="text" id="or-op" value="v" autocomplete="off" maxlength="3">
                     </div>
                     <div class="symbol-input-group">
-                        <label for="conditional-op">Conditional</label>
+                        <label data-translate="conditional" for="conditional-op">Conditional</label>
                         <input type="text" id="conditional-op" value="->" autocomplete="off" maxlength="4">
                     </div>
                     <div class="symbol-input-group">
-                        <label for="biconditional-op">Biconditional</label>
+                        <label data-translate="biconditional" for="biconditional-op">Biconditional</label>
                         <input type="text" id="biconditional-op" value="<->" autocomplete="off" maxlength="4">
                     </div>
                 </div>
             </div>
 
             <div class="symbols-section">
-                <h3>Boolean Values</h3>
+                <h3 data-translate="boolean">Boolean Values</h3>
                 <div class="symbols-grid boolean-grid">
                     <div class="symbol-input-group">
-                        <label for="true-val">True</label>
+                        <label data-translate="true" for="true-val">True</label>
                         <input type="text" id="true-val" value="true" autocomplete="off" maxlength="5">
                     </div>
                     <div class="symbol-input-group">
-                        <label for="false-val">False</label>
+                        <label data-translate="false" for="false-val">False</label>
                         <input type="text" id="false-val" value="false" autocomplete="off" maxlength="5">
                     </div>
                 </div>
@@ -421,6 +421,15 @@
                 'note': 'Note:',
                 'noteText': 'Parentheses are not supported. Expressions are evaluated by operator precedence.',
                 'placeholder': 'Enter logical expression (e.g., A ^ B)',
+                'operators' : 'Operators',
+                'not' : 'NOT',
+                'and' : 'AND',
+                'or' : 'OR',
+                'conditional' : 'CONDITIONAL',
+                'biconditional' : 'BICONDITIONAL',
+                'boolean' : 'BOOLEAN VALUES',
+                'true' : 'TRUE',
+                'false' : 'FALSE',
                 'generateButton': 'Generate',
                 'clearButton': 'Clear',
                 'errorEmpty': 'Please enter a logical expression',
@@ -438,6 +447,15 @@
                 'note': 'Aviso:',
                 'noteText': 'Parênteses não são suportados. As expressões são avaliadas por precedência de operador.',
                 'placeholder': 'Digite uma expressão lógica (ex: A ^ B)',
+                'operators' : 'Operadores',
+                'not' : 'NÃO',
+                'and' : 'E',
+                'or' : 'OU',
+                'conditional' : 'CONDICIONAL',
+                'biconditional' : 'BICONDICIONAL',
+                'boolean' : 'VALORES BOOLEANOS',
+                'true' : 'VERDADEIRO',
+                'false' : 'FALSO',
                 'generateButton': 'Gerar',
                 'clearButton': 'Limpar',
                 'errorEmpty': 'Por favor, insira uma expressão lógica',
@@ -456,6 +474,17 @@
         document.querySelector('[data-translate="note"]').textContent = translations[lang].note;
         document.querySelector('[data-translate="noteText"]').textContent = translations[lang].noteText;
         document.querySelector('[data-translate="placeHolder"]').placeholder = translations[lang].placeholder;
+        document.querySelector('[data-translate="operators"]').textContent = translations[lang].operators;
+        document.querySelector('[data-translate="not"]').textContent = translations[lang].not;
+        document.querySelector('[data-translate="and"]').textContent = translations[lang].and;
+        document.querySelector('[data-translate="or"]').textContent = translations[lang].or;
+        document.querySelector('[data-translate="conditional"]').textContent = translations[lang].conditional;
+        document.querySelector('[data-translate="biconditional"]').textContent = translations[lang].biconditional;
+        document.querySelector('[data-translate="boolean"]').textContent = translations[lang].boolean;
+        document.querySelector('[data-translate="true"]').textContent = translations[lang].true;
+        document.querySelector('[data-translate="false"]').textContent = translations[lang].false;
+
+
         document.querySelector('[data-translate="generateButton"]').textContent = translations[lang].generateButton;
         document.querySelector('[data-translate="clearButton"]').textContent = translations[lang].clearButton;
 
