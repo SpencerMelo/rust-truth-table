@@ -381,11 +381,11 @@
                 <div class="symbols-grid boolean-grid">
                     <div class="symbol-input-group">
                         <label data-translate="true" for="true-val">True</label>
-                        <input type="text" id="true-val" value="true" autocomplete="off" maxlength="5">
+                        <input type="text" id="true-val" value="true" autocomplete="off" maxlength="10">
                     </div>
                     <div class="symbol-input-group">
                         <label data-translate="false" for="false-val">False</label>
-                        <input type="text" id="false-val" value="false" autocomplete="off" maxlength="5">
+                        <input type="text" id="false-val" value="false" autocomplete="off" maxlength="10">
                     </div>
                 </div>
             </div>
@@ -483,6 +483,8 @@
         document.querySelector('[data-translate="boolean"]').textContent = translations[lang].boolean;
         document.querySelector('[data-translate="true"]').textContent = translations[lang].true;
         document.querySelector('[data-translate="false"]').textContent = translations[lang].false;
+        document.getElementById('true-val').value = translations[lang].true;
+        document.getElementById('false-val').value = translations[lang].false;
 
 
         document.querySelector('[data-translate="generateButton"]').textContent = translations[lang].generateButton;
